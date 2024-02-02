@@ -5,21 +5,22 @@ const http = require('http');
 const mongoose = require('mongoose');
 
 const app = express();
-const server = http.createServer(app);\
+const server = http.createServer(app);
+console.log(process.env.DATABASE_URL);
 
 // add mongoose connection
-
+mongoose.connect(process.env.DATABASE_URL, {useNewUrlParser: true});
+const db = mongoose.connection;
+db.on("error", err => console.error(err));
+db.once("open", () => console.log('Connected to Database'))
 
 app.use(express.json());
 
 // import routers
 const gamesRouter = require("./routers/games-router");
-const usersRouter = require("./routers/users-router");
 
 // use routers
 app.use("/games", gamesRouter);
-app.use("/players", usersRouter);
-
 
 // start server
 server.listen(3000, () => {

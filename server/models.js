@@ -17,3 +17,11 @@ const gameSchema= new mongoose.Schema({
     p2word:{type:String}
 })
 
+const User= mongoose.model("User", userSchema);
+const Game= mongoose.model("Game",gameSchema);
+
+module.exports = {
+    User: User,
+    Game: Game
+};
+

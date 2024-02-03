@@ -1,8 +1,13 @@
 import './App.css'
+import Header from './components/Header'
+import GamePage from './pages/GamePage'
 
 function App() {
   return (
-    <div className='text-red-500'>Hello WordHunt</div>
+    <main className='bg-white'>
+      <Header />
+      <GamePage />
+    </main>
   )
 }
 

@@ -13,17 +13,6 @@ userRouter.get("/", async (req, res) => {
       }
 });
 
-// finds user with id
-userRouter.get("/:id", async (req, res) => {
-    try {
-        let user = await User.findById(req.params.id);
-        res.json(user);
-      } catch (err) {
-        res.status(500).send(err);
-      }
-});
-
-
 userRouter.get("/login", (req,res)=> {
     // Check if the user has a cookie with a key of "username"
     const existingUsername = req.cookies.username;
@@ -39,6 +28,16 @@ userRouter.get("/login", (req,res)=> {
         // Send a cookie with the random username
         res.cookie('username', randomUsername);
     }
+});
+
+// finds user with id
+userRouter.get("/:id", async (req, res) => {
+    try {
+        let user = await User.findById(req.params.id);
+        res.json(user);
+      } catch (err) {
+        res.status(500).send(err);
+      }
 });
 
 

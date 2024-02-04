@@ -1,10 +1,11 @@
 import './App.css'
 import Header from './components/Header'
 import GamePage from './pages/GamePage'
+import HomePage from './pages/HomePage'
 
 function App() {
   return (
-    <main className='bg-white'>
+    <main>
       <Header />
       <GamePage />
     </main>

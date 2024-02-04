@@ -1,13 +1,13 @@
 import './App.css'
 import Header from './components/Header'
-import GamePage from './pages/GamePage'
 import HomePage from './pages/HomePage'
+import GamePage from './pages/GamePage'
 
 function App() {
   return (
     <main>
       <Header />
-      <GamePage />
+      <HomePage></HomePage>
     </main>
   )
 }

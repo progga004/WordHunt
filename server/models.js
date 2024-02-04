@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const userSchema= new mongoose.Schema({
     username:{type:String, required: true},
-    game:[{type: mongoose.Schema.Types.ObjectId, ref:"Game",default:[]}]
+    games: {type: [mongoose.Schema.Types.ObjectId], ref:"Game", default: []}
 })
 
 const gameSchema= new mongoose.Schema({

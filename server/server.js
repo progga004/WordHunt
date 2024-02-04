@@ -3,6 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const http = require('http');
 const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser')
 
 const app = express();
 const server = http.createServer(app);
@@ -15,12 +16,15 @@ db.on("error", err => console.error(err));
 db.once("open", () => console.log('Connected to Database'))
 
 app.use(express.json());
+app.use(cookieParser());
 
 // import routers
 const gamesRouter = require("./routers/games-router");
+const userRouter = require("./routers/users-router");
 
 // use routers
 app.use("/games", gamesRouter);
+app.use("/users", userRouter);
 
 // start server
 server.listen(3000, () => {

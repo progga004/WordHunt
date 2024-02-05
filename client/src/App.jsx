@@ -7,8 +7,8 @@ function App() {
   return (
     <main>
       <Header />
-      {/* <HomePage></HomePage> */}
-      <GamePage></GamePage>
+      <HomePage></HomePage>
+      {/* <GamePage></GamePage> */}
       {/* <StatsPage></StatsPage> */}
     </main>
   )

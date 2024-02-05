@@ -1,7 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import LetterBox from './LetterBox'; 
+import React, { useState, useEffect } from "react";
+import LetterBox from "./LetterBox";
 
-const CenterPanel = ({ actualWord, isYourTurn, onSubmitGuess, resetInputs }) => {
+const CenterPanel = ({
+  actualWord,
+  isYourTurn,
+  onSubmitGuess,
+  resetInputs,
+}) => {
   const [inputs, setInputs] = useState(Array(actualWord.length).fill(""));
   const [feedbackMessage, setFeedbackMessage] = useState("");
 
@@ -20,7 +25,7 @@ const CenterPanel = ({ actualWord, isYourTurn, onSubmitGuess, resetInputs }) => 
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (inputs.some(input => input === "")) {
+    if (inputs.some((input) => input === "")) {
       setFeedbackMessage("Please fill in all the letters before submitting.");
       return;
     }
@@ -46,17 +51,31 @@ const CenterPanel = ({ actualWord, isYourTurn, onSubmitGuess, resetInputs }) => 
 
       <div className="flex mb-4">
         {inputs.map((letter, index) => (
-          <LetterBox key={index} letter={letter} onChange={handleLetterChange(index)} id={`letter-${index}`} />
+          <LetterBox
+            key={index}
+            letter={letter}
+            onChange={handleLetterChange(index)}
+            id={`letter-${index}`}
+          />
         ))}
       </div>
 
       {feedbackMessage && (
-        <div className={`text-xl mt-4 p-4 rounded ${feedbackMessage.startsWith("Correct") ? "text-green-700 bg-green-200" : "text-red-700 bg-red-200"} font-bold shadow-md mb-6`}>
+        <div
+          className={`text-xl mt-4 p-4 rounded ${
+            feedbackMessage.startsWith("Correct")
+              ? "text-green-700 bg-green-200"
+              : "text-red-700 bg-red-200"
+          } font-bold shadow-md mb-6`}
+        >
           {feedbackMessage}
         </div>
       )}
 
-      <button onClick={handleSubmit} className="text-xl bg-green-500 text-white px-8 py-3 rounded-lg shadow-lg hover:bg-green-600 transition-colors">
+      <button
+        onClick={handleSubmit}
+        className="text-xl bg-green-500 text-white px-8 py-3 rounded-lg shadow-lg hover:bg-green-600 transition-colors"
+      >
         Submit
       </button>
     </div>

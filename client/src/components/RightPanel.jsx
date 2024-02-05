@@ -1,11 +1,14 @@
 const RightPanel = ({ username, guesses, actualWord }) => {
-
   const calculateCommonLetters = (guess, actualWord) => {
-    const actualLetters = actualWord.toUpperCase().split('');
-    const guessLetters = guess.toUpperCase().split('');
+    const actualLetters = actualWord.toUpperCase().split("");
+    const guessLetters = guess.toUpperCase().split("");
     let common = 0;
 
-    for (let i = 0; i < Math.min(actualLetters.length, guessLetters.length); i++) {
+    for (
+      let i = 0;
+      i < Math.min(actualLetters.length, guessLetters.length);
+      i++
+    ) {
       if (guessLetters[i] === actualLetters[i]) {
         common++;
       }

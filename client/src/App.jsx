@@ -11,7 +11,7 @@ function App() {
       <GamePage></GamePage>
       {/* <StatsPage></StatsPage> */}
     </main>
-  )
+  );
 }
 
-export default App
+export default App;

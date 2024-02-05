@@ -4,6 +4,7 @@ const express = require('express');
 const http = require('http');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser')
+const handleSocketConnection = require('./socket');
 
 const app = express();
 const server = http.createServer(app);
@@ -25,6 +26,10 @@ const userRouter = require("./routers/users-router");
 // use routers
 app.use("/games", gamesRouter);
 app.use("/users", userRouter);
+
+
+// socket handlers
+handleSocketConnection(server);
 
 // start server
 server.listen(3000, () => {

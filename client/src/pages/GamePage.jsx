@@ -26,7 +26,7 @@ const GamePage = () => {
         <LeftPanel
           username="Player 1"
           guesses={guessesLeft}
-          actualWord={actualWordLeft}
+          actualWord={actualWordRight}
         />
         <CenterPanel
           actualWord={isYourTurn ? actualWordRight : actualWordLeft}
@@ -37,7 +37,7 @@ const GamePage = () => {
         <RightPanel
           username="Player 2"
           guesses={guessesRight}
-          actualWord={actualWordRight}
+          actualWord={actualWordLeft}
         />
       </div>
     </div>

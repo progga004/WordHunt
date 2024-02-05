@@ -12,7 +12,10 @@ const HomePage = () => {
           View Stats
         </button>
         {/* View Rules */}
-        <a href="#" className="text-green-600 hover:text-green-800 text-lg font-semibold">
+        <a
+          href="#"
+          className="text-green-600 hover:text-green-800 text-lg font-semibold"
+        >
           View Rules
         </a>
       </div>

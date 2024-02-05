@@ -3,29 +3,30 @@ const StatsPage = (props) => {
     //sorry about the messy code, will fix once backend is connected
 
     const testUser= {username:"test", games:[{}]}//replace with current User
-    const testGames=[{id:1,player1:"me",player2:"test", winner:"me"}]//replace this with an actual list of Games
+    const testGames=[{id:1,player1:"me",player2:"test", winner:"me",endttime:new Date()},
+    {id:2,player1:"a",player2:"b",winner:"a",endttime:new Date(1999, 0, 1)}]//replace this with an actual list of Games
     const [currentSortOrder, setCurrentSortOrder] = useState("asIs");
 
     //testUserNameData="test"//replace this with the current users name
     //implement logic for grabbing games from each player in the database
     //implement logic for getting all games from database
 
-    function setToNewest(){
+    const setToNewest=() =>{
         setCurrentSortOrder("newest");
     }
 
     //displays all games
-    function setToAll(){
-        setCurrentSortOrder("AsIs");
+    const setToAll=()=>{
+        setCurrentSortOrder("asIs");
     }
 
     //sets sortorder to games from last hour
-    function setToLastHour(){
+    const setToLastHour = ()=>{
         setCurrentSortOrder("lastHour");
     }
 
     //use this function for sorting the games
-    function sortGames(games, sortOrder="newest"){
+    const sortGames=(games, sortOrder)=>{
         
         if(sortOrder==="newest"){// sorts all games by newest first
             return games.sort(
@@ -56,22 +57,29 @@ const StatsPage = (props) => {
     }
 
     return (
-        <div className="bg-green-200 min-h-screen flex items-center justify-center">
-            <div id="sortbuttons">
-                <button onClick={setToAll}>All</button>
-                <button onClick={setToLastHour}>Last Hour</button>
-            </div>
-            <table>
-                {sortGames(testGames).map((game)=>(
-                    <tr key={game.id}>
-                        <th>{game.player1}</th>
-                        <th>{game.player2}</th>
-                        <th>{game.winner}</th>
-                    </tr>
-                )
-                )}
+        <div className="bg-green-200 min-h-screen pt-16">
+          <div id="sortbuttons" className="flex justify-end pt-8 pr-4 w-full">
+            <button onClick={setToAll} className="bg-green-800 text-white font-bold py-2 px-4 rounded hover:bg-green-700 focus:outline-none focus:shadow-outline mr-2">All</button>
+            <button onClick={setToLastHour} className="bg-green-800 text-white font-bold py-2 px-4 rounded hover:bg-green-700 focus:outline-none focus:shadow-outline mr-2">Last Hour</button>
+            <button onClick={setToNewest} className="bg-green-800 text-white font-bold py-2 px-4 rounded hover:bg-green-700 focus:outline-none focus:shadow-outline">Newest</button>
+          </div>
+          <div className="flex justify-center items-center w-full h-full">
+            <table className="text-center w-auto">
+              <tbody>
+                {sortGames(testGames, currentSortOrder).map((game) => (
+                  <tr key={game.id}>
+                    <th className="pr-4">Player1: {game.player1}</th>
+                    <th className="px-4">Player2: {game.player2}</th>
+                    <th className="px-4">Winner: {game.winner}</th>
+                    <th className="pl-4">Time:{game.endttime.toLocaleString('en-US', {year: 'numeric',month: '2-digit',day: '2-digit',hour: '2-digit',
+                        minute: '2-digit',second: '2-digit',hour12: false,})}</th>
+                  </tr>
+                ))}
+              </tbody>
             </table>
+          </div>
         </div>
-    );
+      );
+      
 };
 export default StatsPage;

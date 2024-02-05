@@ -8,6 +8,7 @@ function App() {
     <main>
       <Header />
       <HomePage></HomePage>
+      {/* <StatsPage></StatsPage> */}
     </main>
   )
 }

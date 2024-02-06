@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 const LetterBox = ({ letter, onChange, id }) => {
   return (
     <div className="border-2 border-gray-300 w-12 h-12 mx-1 flex justify-center items-center">

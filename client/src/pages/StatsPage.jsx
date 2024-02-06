@@ -1,5 +1,5 @@
 import { useState } from "react";
-const StatsPage = (props) => {
+const StatsPage = () => {
     //sorry about the messy code, will fix once backend is connected
 
     const testUser= {username:"test", games:[{}]}//replace with current User

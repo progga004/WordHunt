@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 const RightPanel = ({ username, guesses, actualWord }) => {
   const calculateCommonLetters = (guess, actualWord) => {
     const actualLetters = actualWord.toUpperCase().split("");

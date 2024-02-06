@@ -3,6 +3,7 @@ const userRouter= express.Router()
 const mod = require('../models');
 const User =mod["User"]
 const fs = require('fs');
+const { exit } = require("process");
 
 // returns all user records
 userRouter.get("/", async (req, res) => {
@@ -16,18 +17,19 @@ userRouter.get("/", async (req, res) => {
 
 userRouter.get("/login", (req,res)=> {
     // Check if the user has a cookie with a key of "username"
-    const existingUsername = req.cookies.username;
-    console.log(existingUsername);
+    let existingUsername = req.cookies.username;
 
-    if (existingUsername) {
-        // If the user has a cookie, assign the existing username to them
-        res.cookie('username', existingUsername);
-    } else {
+    if (!existingUsername)
         // If the user does not have a cookie, generate a random username
-        const random = randomUsername()// subject to change
-        
-        // Send a cookie with the random username
-        res.cookie('username', random);
+        existingUsername = randomUsername()// subject to change
+
+    console.log(existingUsername);
+    try {
+        res.cookie("username", existingUsername).status(200).json({
+                "username": existingUsername
+        });
+    } catch (err) {
+        res.status(500).json({ "message": err.message})
     }
 });
 

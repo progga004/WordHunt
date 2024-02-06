@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 const StatsPage = () => {
     //sorry about the messy code, will fix once backend is connected
 
@@ -62,6 +63,9 @@ const StatsPage = () => {
             <button onClick={setToAll} className="bg-green-800 text-white font-bold py-2 px-4 rounded hover:bg-green-700 focus:outline-none focus:shadow-outline mr-2">All</button>
             <button onClick={setToLastHour} className="bg-green-800 text-white font-bold py-2 px-4 rounded hover:bg-green-700 focus:outline-none focus:shadow-outline mr-2">Last Hour</button>
             <button onClick={setToNewest} className="bg-green-800 text-white font-bold py-2 px-4 rounded hover:bg-green-700 focus:outline-none focus:shadow-outline">Newest</button>
+            <Link to="/" className="ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                    Back to Home
+                </Link>
           </div>
           <div className="flex justify-center items-center w-full h-full">
             <table className="text-center w-auto">

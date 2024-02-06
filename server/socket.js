@@ -1,12 +1,22 @@
 const socketIo = require('socket.io');
 
 function handleSocketConnection(server) {
-    const io = socketIo(server);
+    const io = socketIo(server, {
+        cors: {origin: "http://localhost:5173"}
+    });
 
-    const rooms = [];
+    const rooms = [{
+        "player1": null,
+        "player2": null,
+        "player1Word": null,
+        "player2Word": null,
+        "numUsers": 0
+    }];
     let lastRoom = 0 // keeps track of last room populated so no users are left waiting indefinitely
 
     io.on('connection', socket => {
+
+        console.log("user connected");
 
         // find and join room
         let idx = rooms[lastRoom]["numUsers"] === 1 ? lastRoom : findRoom();
@@ -19,6 +29,8 @@ function handleSocketConnection(server) {
         let currRoom = `room ${idx}`
         socket.join(currRoom);
 
+        console.log(currRoom);
+
         // User sends username
         socket.on("USERNAME", user => {
             username = user;
@@ -26,6 +38,8 @@ function handleSocketConnection(server) {
                 rooms[idx]["player1"] = username;
             else
                 rooms[idx]["player2"] = username;
+
+            console.log(rooms[lastRoom])
 
             // send to client that they should wait for another player
             socket.emit("FINDING PLAYER");
@@ -69,7 +83,7 @@ function handleSocketConnection(server) {
                     io.to(currRoom).emit("GAME OVER", username)
             else {
                 let lettersInCommon = findLetters(word, wordToCompare);
-                io.to(currRoom).emit("SWITCH TURN", wordToCompare, lettersInCommon);
+                io.to(currRoom).emit("SWITCH TURN", word, lettersInCommon);
             }
         })
 
@@ -82,8 +96,9 @@ function handleSocketConnection(server) {
 
         socket.on("disconnect", () => {
 
+            console.log("disconnected");
             // send game over to client and set people in room to 0
-            io.to(currRoom).emit("GAME OVER");
+            io.to(currRoom).emit("PLAYER LEFT");
 
             // clean up room
             rooms[idx] = {
@@ -96,10 +111,10 @@ function handleSocketConnection(server) {
         });
     });
 
+    // logic for finding first available room
     const findRoom = () => {
-        // logic for finding first available room
         for (let i = 0; i < rooms.length; i++) {
-            if (rooms[i] < 2)
+            if (rooms[i]["numUsers"] < 2)
                 return i;
         }
     
@@ -114,9 +129,16 @@ function handleSocketConnection(server) {
         return rooms.length - 1;
     }
 
-    // have questions about this
+    // IMPORTANT: word1 is the guess, word2 is the users actual word
     const findLetters = (word1, word2) => {
-        let numInCommon = 0
+        let numInCommon = 0;
+        for (let i = 0; i < word2.length; i++) {
+            for (let j = 0; j < word1.length; j++) {
+                if (word2[i] === word1[j])
+                    numInCommon++;
+            }
+        }
+        return numInCommon;
     }
 }
 

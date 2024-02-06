@@ -73,6 +73,10 @@ function handleSocketConnection(server) {
             }
         })
 
+        socket.on("MESSAGE", message => {
+            io.to(currRoom).emit("MESSAGE", message, username);
+        })
+
 
         // ----------------------------------------------
 

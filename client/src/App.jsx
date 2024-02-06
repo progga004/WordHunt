@@ -19,6 +19,7 @@ function App() {
           <Route path="/find-player" element={<FindingPlayerPage/>}/>
           <Route path="/stats" element={<StatsPage />} />
           <Route path="/game-rules" element={<RulesPage /> } />
+          <Route path="/enter-word" element={<EnterWordPage /> } />
         </Routes>
       </main>
     </BrowserRouter>

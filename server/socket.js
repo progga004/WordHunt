@@ -1,4 +1,8 @@
 const socketIo = require('socket.io');
+const models = require('./models')
+const Game = models["Game"];
+const User = models["User"];
+
 
 function handleSocketConnection(server) {
     const io = socketIo(server, {
@@ -10,7 +14,11 @@ function handleSocketConnection(server) {
         "player2": null,
         "player1Word": null,
         "player2Word": null,
-        "numUsers": 0
+        "numUsers": 0,
+        "moves": [],
+        "winner": null,
+        "messages": [],
+        "starttime": Date.now(),
     }];
     let lastRoom = 0 // keeps track of last room populated so no users are left waiting indefinitely
 
@@ -63,8 +71,10 @@ function handleSocketConnection(server) {
             else
                 rooms[idx]["player2Word"] = word;
 
-            if (rooms[idx]["player1Word"] && rooms[idx]["player2Word"])
+            if (rooms[idx]["player1Word"] && rooms[idx]["player2Word"]) {
+                rooms[idx]["starttime"] = Date.now();
                 io.to(currRoom).emit("SWITCH TURN", rooms[idx]["player1"]);
+            }
             else
                 socket.emit("WAITING FOR OTHER WORD CHOICE");
         });
@@ -79,15 +89,20 @@ function handleSocketConnection(server) {
                 wordToCompare = rooms[idx]["player1Word"];
             
             // compare letters and send info to clients
-            if (wordToCompare === word)
+            if (wordToCompare === word) {
+                    rooms[idx]["winner"] = username;
+                    postGame(idx);
                     io.to(currRoom).emit("GAME OVER", username)
+            }
             else {
                 let lettersInCommon = findLetters(word, wordToCompare);
+                rooms[idx]["moves"].push(`${word} - ${lettersInCommon}`)
                 io.to(currRoom).emit("SWITCH TURN", word, lettersInCommon);
             }
         })
 
         socket.on("MESSAGE", message => {
+            rooms[idx]["messages"].push(`${username}: ${message}`);
             io.to(currRoom).emit("MESSAGE", message, username);
         })
 
@@ -106,7 +121,12 @@ function handleSocketConnection(server) {
                 "player2": null,
                 "player1Word": null,
                 "player2Word": null,
-                "numUsers": 0
+                "numUsers": 0,
+                "moves": [],
+                "winner": null,
+                "messages": [],
+                "starttime": Date.now(),
+                "endtime": Date.now()
             };
         });
     });
@@ -139,6 +159,41 @@ function handleSocketConnection(server) {
             }
         }
         return numInCommon;
+    }
+
+    const postGame = async idx => {
+        let room = rooms[idx];
+
+        // create new Game object of completed game
+        const newGame = new Game({
+            player1: room["player1"],
+            player2: room["player2"],
+            moves: room["moves"],
+            winner: room["winner"],
+            starttime: room["starttime"],
+            endttime: Date.now(),
+            messages: room["messages"],
+            p1word: room["player1Word"],
+            p2word: room["player2Word"]
+        });
+
+        try {
+
+            // save the game to the database
+            await newGame.save();
+
+            // push the games to each players games list in the database
+            await User.findOneAndUpdate(
+                { "username": room["player1"] },
+                { $push: { games: newGame} }
+            );
+            await User.findOneAndUpdate(
+                { "username": room["player2"] },
+                { $push: { games: newGame} }
+            );
+        } catch (err) {
+            console.log(err.message);
+        }
     }
 }
 

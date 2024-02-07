@@ -11,8 +11,9 @@ const app = express();
 const server = http.createServer(app);
 console.log(process.env.DATABASE_URL);
 
-// add mongoose connection
-mongoose.connect(process.env.DATABASE_URL, {useNewUrlParser: true});
+
+mongoose.connect('mongodb://127.0.0.1/wordHunt', {useNewUrlParser: true}); //changed to ipv4
+
 const db = mongoose.connection;
 db.on("error", err => console.error(err));
 db.once("open", () => console.log('Connected to Database'))

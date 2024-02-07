@@ -6,8 +6,8 @@ const userSchema= new mongoose.Schema({
 })
 
 const gameSchema= new mongoose.Schema({
-    player1:{type:String, requred:true},
-    player2:{type:String, requred:true},
+    player1:{type:String, required:true},
+    player2:{type:String, required:true},
     moves:{type:Array,default:[]},
     winner:{type:String},
     starttime: { type: Date, default: new Date() },

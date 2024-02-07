@@ -5,19 +5,29 @@ const http = require('http');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser')
 const handleSocketConnection = require('./socket');
+const cors = require('cors');
 
 const app = express();
 const server = http.createServer(app);
 console.log(process.env.DATABASE_URL);
 
-// add mongoose connection
-mongoose.connect(process.env.DATABASE_URL, {useNewUrlParser: true});
+
+mongoose.connect('mongodb://127.0.0.1/wordHunt', {useNewUrlParser: true}); //changed to ipv4
+
 const db = mongoose.connection;
 db.on("error", err => console.error(err));
 db.once("open", () => console.log('Connected to Database'))
 
 app.use(express.json());
 app.use(cookieParser());
+
+// for making requests from client side application
+app.use(cors());
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', 'http://localhost:5173');
+    res.header('Access-Control-Allow-Credentials', 'true');
+    next();
+  });
 
 // import routers
 const gamesRouter = require("./routers/games-router");

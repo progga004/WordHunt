@@ -10,6 +10,7 @@ import RulesPage from "./pages/RulesPage";
 
 function App() {
   return (
+
     <BrowserRouter>
       <main>
         <Header />
@@ -23,6 +24,7 @@ function App() {
         </Routes>
       </main>
     </BrowserRouter>
+
   );
 }
 

@@ -1,12 +1,30 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { gamesAPI } from "../components/Api";
+import { userAPI } from "../components/Api";
+import { useEffect } from "react";
 const StatsPage = () => {
     //sorry about the messy code, will fix once backend is connected
 
+    
     const testUser= {username:"test", games:[{}]}//replace with current User
-    const testGames=[{id:1,player1:"me",player2:"test", winner:"me",endttime:new Date()},
-    {id:2,player1:"a",player2:"b",winner:"a",endttime:new Date(1999, 0, 1)}]//replace this with an actual list of Games
+    const [allgames, setAllGames] = useState([]);
+    // const testGames=[{id:1,player1:"me",player2:"test", winner:"me",endttime:new Date()},
+    // {id:2,player1:"a",player2:"b",winner:"a",endttime:new Date(1999, 0, 1)}]//replace this with an actual list of Games
     const [currentSortOrder, setCurrentSortOrder] = useState("asIs");
+
+    useEffect(() => {
+      const fetchGames = async () => {
+        try {
+          const allGames = await gamesAPI.getAllGames(); 
+          setAllGames(allGames); 
+        } catch (error) {
+          console.error("Error fetching games:", error);
+        }
+      };
+  
+      fetchGames();
+    }, []);
 
     //testUserNameData="test"//replace this with the current users name
     //implement logic for grabbing games from each player in the database
@@ -36,17 +54,17 @@ const StatsPage = () => {
         }
         else if(sortOrder==="byUser"){//use this when getting specific user data
             let usersGames=[]
-            for(let i=0;i<testGames.length;i++){
-                if (testGames[i].player1===testUser["username"] || testGames[i].player2===testUser["username"] )
-                usersGames.push(testGames[i])
+            for(let i=0;i<allgames.length;i++){
+                if (allgames[i].player1===testUser["username"] || allgames[i].player2===testUser["username"] )
+                usersGames.push(allgames[i])
             }
             return usersGames
         }
         else if (sortOrder==="lastHour"){
             let lastHour=[]
-            for(let i=0;i<testGames.length;i++){
-                if ((new Date())-testGames[i].endttime<=3600000){
-                    lastHour.push(testGames[i])
+            for(let i=0;i<allgames.length;i++){
+                if ((new Date())-allgames[i].endttime<=3600000){
+                    lastHour.push(allgames[i])
                 }
                 
             }
@@ -70,7 +88,7 @@ const StatsPage = () => {
           <div className="flex justify-center items-center w-full h-full">
             <table className="text-center w-auto">
               <tbody>
-                {sortGames(testGames, currentSortOrder).map((game) => (
+                {sortGames(allgames, currentSortOrder).map((game) => (
                   <tr key={game.id}>
                     <th className="pr-4">Player1: {game.player1}</th>
                     <th className="px-4">Player2: {game.player2}</th>

@@ -41,6 +41,7 @@ function handleSocketConnection(server) {
 
         // User sends username
         socket.on("USERNAME", user => {
+            console.log(`Recieving username ${user}`);
             username = user;
             if (rooms[idx]["player1"] === null)
                 rooms[idx]["player1"] = username;
@@ -65,6 +66,8 @@ function handleSocketConnection(server) {
         
         socket.on("WORD CHOICE", word => {
 
+            console.log(`Recieving word ${word}`);
+
             // store word
             if (rooms[idx]["player1"] === username)
                 rooms[idx]["player1Word"] = word;
@@ -73,20 +76,27 @@ function handleSocketConnection(server) {
 
             if (rooms[idx]["player1Word"] && rooms[idx]["player2Word"]) {
                 rooms[idx]["starttime"] = Date.now();
-                io.to(currRoom).emit("SWITCH TURN", rooms[idx]["player1"]);
+                io.to(currRoom).emit("GAME START", rooms[idx]["player1"]);
             }
             else
                 socket.emit("WAITING FOR OTHER WORD CHOICE");
         });
 
         socket.on("WORD GUESS", word => {
+
+            console.log(`Recieving Word Guess ${word}`)
             let wordToCompare;
+            let nextUser;
 
             // find which user to compare against
-            if (rooms[idx]["player1"] === username)
+            if (rooms[idx]["player1"] === username) {
                 wordToCompare = rooms[idx]["player2Word"]
-            else
+                nextUser = rooms[idx]["player2"];
+            }
+            else {
                 wordToCompare = rooms[idx]["player1Word"];
+                nextUser = rooms[idx]["player1"]
+            }
             
             // compare letters and send info to clients
             if (wordToCompare === word) {
@@ -97,11 +107,12 @@ function handleSocketConnection(server) {
             else {
                 let lettersInCommon = findLetters(word, wordToCompare);
                 rooms[idx]["moves"].push(`${word} - ${lettersInCommon}`)
-                io.to(currRoom).emit("SWITCH TURN", word, lettersInCommon);
+                io.to(currRoom).emit("SWITCH TURN", nextUser, word, lettersInCommon);
             }
         })
 
         socket.on("MESSAGE", message => {
+            console.log(`Recieving message ${message}`);
             rooms[idx]["messages"].push(`${username}: ${message}`);
             io.to(currRoom).emit("MESSAGE", message, username);
         })
@@ -111,7 +122,9 @@ function handleSocketConnection(server) {
 
         socket.on("disconnect", () => {
 
-            console.log("disconnected");
+            console.log(`user ${username} just disconnected`);
+            if (currRoom)
+                console.log(`Clearing ${currRoom}`);
             // send game over to client and set people in room to 0
             io.to(currRoom).emit("PLAYER LEFT");
 
@@ -144,7 +157,12 @@ function handleSocketConnection(server) {
             "player2": null,
             "player1Word": null,
             "player2Word": null,
-            "numUsers": 0
+            "numUsers": 0,
+            "moves": [],
+            "winner": null,
+            "messages": [],
+            "starttime": Date.now(),
+            "endtime": Date.now()
         });
         return rooms.length - 1;
     }

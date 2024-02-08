@@ -3,7 +3,6 @@ import HomePage from "./pages/HomePage";
 import GamePage from "./pages/GamePage";
 import StatsPage from "./pages/StatsPage";
 import FindingPlayerPage from "./components/FindPlayer";
-import Countdown from "./components/countdown";
 import EnterWordPage from "./components/EnterWordPage";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import RulesPage from "./pages/RulesPage";

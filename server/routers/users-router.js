@@ -4,6 +4,7 @@ const mod = require("../models");
 const User = mod["User"];
 const fs = require("fs");
 const { exit } = require("process");
+const path = require('path');
 
 // returns all user records
 userRouter.get("/", async (req, res) => {
@@ -27,7 +28,7 @@ userRouter.get("/login", (req, res) => {
     const newUser = new User({
         username: existingUsername
     })
-    newUser.save();
+    newUser.save().catch(err => {console.log('user already exists')});
     res.cookie("username", existingUsername).status(200).json({
       username: existingUsername,
     });
@@ -61,7 +62,7 @@ userRouter.post("/", async (req, res) => {
 });
 
 const randomUsername = () => {
-  let words = fs.readFileSync("./sgb-words.txt", "utf-8").split("\n");
+  let words = fs.readFileSync("../5_letter_words.txt", "utf-8").split("\n");
   let randomNumber = Math.floor(Math.random() * (9999 - 1000)) + 1000;
   let randomUsername = `${words[Math.floor(Math.random() * words.length)]}${
     words[Math.floor(Math.random() * words.length)]

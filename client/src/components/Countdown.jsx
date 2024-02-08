@@ -7,7 +7,7 @@ const Countdown = () => {
 
     useEffect(() => {
         if (count === 0) {
-            navigate('/game');
+            navigate('/enter-word');
             return;
         }
         const timerId = setTimeout(() => {

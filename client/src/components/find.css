@@ -1,15 +1,23 @@
-@keyframes loadProgress {
-    0% {
-        width: 0%;
+@keyframes move {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
     }
-    100% {
-        width: 100%;
+    50% {
+      opacity: 0.5;
     }
-}
-
-.progress-bar-animation {
-    animation: loadProgress 10s linear infinite;
-}
-
-
+  }
+  
+  .progress-bar-animation {
+    width: 100%;
+    height: 8px; /* Increased height for prominence */
+    background-size: 200% 100%;
+    animation: move 2s linear infinite, pulse 1s ease-in-out infinite;
+    background-image: linear-gradient(to right, #4caf50, #81C784, #66BB6A, #4CAF50);
+    border-radius: 4px; /* Added for a smoother look */
+  }
   

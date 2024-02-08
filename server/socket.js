@@ -58,8 +58,12 @@ function handleSocketConnection(server) {
         socket.on("WORD CHOICE", word => {
 
             // store word
+            console.log("User server",username,word);
+            console.log(rooms[idx]["player1"],rooms[idx]["player2"])
+            console.log(currRoom);
             if (rooms[idx]["player1"] === username)
                 rooms[idx]["player1Word"] = word;
+
             else
                 rooms[idx]["player2Word"] = word;
 

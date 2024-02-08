@@ -9,6 +9,7 @@ const { exit } = require("process");
 userRouter.get("/", async (req, res) => {
   try {
     const user = await User.find();
+    console.log("All users",user);
     res.json(user);
   } catch (err) {
     res.status(500).send(err);
@@ -18,7 +19,6 @@ userRouter.get("/", async (req, res) => {
 userRouter.get("/login", (req, res) => {
   // Check if the user has a cookie with a key of "username"
   let existingUsername = req.cookies.username;
-
   if (!existingUsername)
     // If the user does not have a cookie, generate a random username
     existingUsername = randomUsername(); // subject to change

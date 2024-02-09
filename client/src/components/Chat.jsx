@@ -1,38 +1,37 @@
 import React, { useState, useEffect, useContext } from 'react';
-import SocketContext from './SocketContext';
+
 import Cookies from 'js-cookie'; 
-const Chat = () => {
+
+const Chat = ({socket}) => {
   const [message, setMessage] = useState('');
-  const [messages, setMessages] = useState([]);
-  const socket = useContext(SocketContext); 
+  const [messages, setMessages] = useState([]);  
   const username= Cookies.get('username');
+  
 
   useEffect(() => {
-    if (socket) {
-      socket.connect();
+    if (socket && username) {
       socket.on("MESSAGE", (incomingMessage, senderUsername) => {
-        if (senderUsername !== username) {
-          setMessages(messages => [...messages, { text: incomingMessage, sender: 'other' }]);
-        }
+        setMessages(prevMessages => [...prevMessages, {
+          text: incomingMessage,
+          sender: senderUsername === username ? 'you' : 'other'
+        }]);
       });
     }
-
     return () => {
       if (socket) {
-        socket.off("MESSAGE"); 
+        socket.off("MESSAGE");
       }
     };
   }, [socket, username]); 
 
   const sendMessage = (e) => {
     e.preventDefault();
-    if (message && socket) {
+    if (message && socket && username) {
       socket.emit("MESSAGE", message, username);
       setMessage('');
-      setMessages(messages => [...messages, { text: message, sender: 'you' }]);
+      setMessages(prevMessages => [...prevMessages, { text: message, sender: 'you' }]);
     }
   };
-
   return (
     <div className="bg-white p-4 rounded-lg shadow-xl flex flex-col justify-between flex-1 max-h-[600px]">
       <div className="flex flex-col">

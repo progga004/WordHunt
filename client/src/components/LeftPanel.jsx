@@ -1,7 +1,7 @@
 import Chat from "./Chat";
 
 /* eslint-disable react/prop-types */
-const LeftPanel = ({ username, guesses, actualWord }) => {
+const LeftPanel = ({ username, guesses, actualWord,socket }) => {
   const calculateCommonLetters = (guess, actualWord) => {
     const actualLetters = actualWord.toUpperCase().split("");
     const guessLetters = guess.toUpperCase().split("");
@@ -33,7 +33,7 @@ const LeftPanel = ({ username, guesses, actualWord }) => {
           ))}
         </div>
       </div>
-      <Chat />
+      <Chat socket={socket}/>
     </div>
   );
 };

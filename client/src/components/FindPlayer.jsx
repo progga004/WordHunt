@@ -2,14 +2,15 @@ import { useEffect, useState, useContext } from 'react';
 import './find.css';
 import Countdown from './Countdown';
 import Cookies from 'js-cookie'; 
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 const FindingPlayerPage = ({socket}) => {
     const username = useLocation().state.username;
+    const navigate = useNavigate();
     const [playerFound, setPlayerFound] = useState(false);
     const [findingPlayer, setFindingPlayer] = useState(false);
  
     useEffect(() => {
-        if (socket) {
+        if (socket && socket.connected) {
             if (username) {
                 console.log('Logged in user:', username);
                 socket.emit('USERNAME', username);
@@ -26,7 +27,8 @@ const FindingPlayerPage = ({socket}) => {
             } else {
                 console.error('Username not found. Make sure the user is logged in before reaching this page.');
             }
-        }
+        } else
+            navigate("/")
     }, [socket]);
 
     return (

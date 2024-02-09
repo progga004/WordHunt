@@ -15,7 +15,7 @@ const GamePage = ({socket}) => {
   const [resetFlag, setResetFlag] = useState(false);
 
   useEffect(() => {
-    if (socket) {
+    if (socket && socket.connected) {
       socket.on("SWITCH TURN", (nextUser, word, lettersInCommon) => {
         if (username === nextUser) {
           setGuessesRight((oldGuesses) => [...oldGuesses, word]);
@@ -38,7 +38,8 @@ const GamePage = ({socket}) => {
 
         navigate('/game-over', {state: {result}});
       })
-    }
+    } else
+      navigate("/");
   }, [socket])
 
   const handleGuessSubmission = (newGuess) => {

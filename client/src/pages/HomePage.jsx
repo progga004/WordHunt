@@ -27,6 +27,9 @@ const HomePage = ({socket}) => {
         console.log('Socket connected successfully');
         navigate('/find-player', {state: {username}}); 
       });
+      socket.on('PLAYER LEFT', () => {
+        socket.disconnect();
+      });
      } 
   };
 

@@ -64,7 +64,9 @@ function handleSocketConnection(server) {
          * PUT THE REST OF THE SOCKET LOGIC BELOW HERE
          */
         
-        socket.on("WORD CHOICE", word => {
+        socket.on("WORD CHOICE", data => {
+            const { username, word } = data;
+            console.log(username + " chose the word: " + word);
 
             console.log(`Recieving word ${word}`);
 

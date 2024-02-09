@@ -1,10 +1,33 @@
-import { useEffect, useState } from "react";
+
+import { useEffect, useState,useContext} from "react";
 import { Link } from "react-router-dom";
-import { userAPI } from "../components/Api"
+import { userAPI } from "../components/Api";
+import SocketContext from "../components/SocketContext";
 
 const HomePage = () => {
+  const [username, setUsername] = useState('');
+    const socket = useContext(SocketContext);
 
-  const [username, setUsername] = useState("");
+    useEffect(() => {
+        const loginUser = async () => {
+            try {
+                const userData = await userAPI.loginUser();
+                console.log('Logged in user:', userData.username);
+                setUsername(userData.username);
+                
+                
+                if(socket) {
+                    socket.connect();
+                    socket.emit('USERNAME', userData.username);
+                }
+            } catch (error) {
+                console.error('Error logging in:', error);
+                
+            }
+        };
+
+        loginUser();
+    }, [socket]); 
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-green-200">

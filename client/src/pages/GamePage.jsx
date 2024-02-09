@@ -36,11 +36,10 @@ const GamePage = ({ socket }) => {
         if (username === winner) result = "win";
         else result = "lose";
 
-        navigate('/game-over', {state: {result}});
-      })
-    } else
-      navigate("/");
-  }, [socket])
+        navigate("/game-over", { state: { result } });
+      });
+    }
+  }, [socket]);
 
   const handleGuessSubmission = (newGuess) => {
     if (currentUserTurn === username) {

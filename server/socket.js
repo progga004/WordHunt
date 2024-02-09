@@ -113,11 +113,14 @@ function handleSocketConnection(server) {
             }
         })
 
-        socket.on("MESSAGE", message => {
-            console.log(`Recieving message ${message}`);
-            rooms[idx]["messages"].push(`${username}: ${message}`);
-            io.to(currRoom).emit("MESSAGE", message, username);
-        })
+        
+        socket.on("MESSAGE", (message, username) => {
+            console.log(`Receiving message from ${username}: ${message}`);
+            rooms[idx]["messages"].push({ sender: username, text: message });
+            socket.broadcast.to(currRoom).emit("MESSAGE", message, username);
+        });
+        
+        
 
 
         // ----------------------------------------------

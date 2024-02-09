@@ -1,14 +1,35 @@
-import React, { useState } from 'react';
-
+import React, { useState, useEffect, useContext } from 'react';
+import SocketContext from './SocketContext';
+import Cookies from 'js-cookie'; 
 const Chat = () => {
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
+  const socket = useContext(SocketContext); 
+  const username= Cookies.get('username');
+
+  useEffect(() => {
+    if (socket) {
+      socket.connect();
+      socket.on("MESSAGE", (incomingMessage, senderUsername) => {
+        if (senderUsername !== username) {
+          setMessages(messages => [...messages, { text: incomingMessage, sender: 'other' }]);
+        }
+      });
+    }
+
+    return () => {
+      if (socket) {
+        socket.off("MESSAGE"); 
+      }
+    };
+  }, [socket, username]); 
 
   const sendMessage = (e) => {
     e.preventDefault();
-    if (message) {
-      setMessages([...messages, { text: message, sender: 'you' }]);
+    if (message && socket) {
+      socket.emit("MESSAGE", message, username);
       setMessage('');
+      setMessages(messages => [...messages, { text: message, sender: 'you' }]);
     }
   };
 

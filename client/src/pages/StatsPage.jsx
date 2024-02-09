@@ -15,16 +15,20 @@ const StatsPage = () => {
 
     useEffect(() => {
       const fetchGames = async () => {
-        try {
-          const allGames = await gamesAPI.getAllGames(); 
-          setAllGames(allGames); 
-        } catch (error) {
-          console.error("Error fetching games:", error);
-        }
+          try {
+              const allGamesResponse = await gamesAPI.getAllGames(); 
+              setAllGames(allGamesResponse);
+          } catch (error) {
+              console.error("Error fetching games:", error);
+          }
       };
-  
-      fetchGames();
-    }, []);
+
+      fetchGames(); 
+
+      const pollingInterval = setInterval(fetchGames, 5000); 
+
+      return () => clearInterval(pollingInterval); 
+  }, []);
 
     //testUserNameData="test"//replace this with the current users name
     //implement logic for grabbing games from each player in the database
@@ -72,6 +76,20 @@ const StatsPage = () => {
         }
         else if(sortOrder==="asIs"){
             return games
+        }
+        else if(sortOrder==="mostWins"){
+          // let wins={}
+          // for(let i =0;i<allgames.length;i++){
+          //   wins[allgames[i].player]
+          // }
+          // for(let i =0;i<allgames.length;i++){
+          //   if (wins[allgames[i].winner]){
+          //     wins[allgames[i].winner]+=1
+          //   }
+          //   else{
+          //     wins[allgames[i].winner]=1
+          //   }
+          // }
         }
     }
 

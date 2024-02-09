@@ -1,19 +1,16 @@
 import { useEffect, useState, useContext } from 'react';
-import SocketContext from './SocketContext';
 import './find.css';
 import Countdown from './Countdown';
 import Cookies from 'js-cookie'; 
-const FindingPlayerPage = () => {
+const FindingPlayerPage = ({socket}) => {
     const [playerFound, setPlayerFound] = useState(false);
     const [findingPlayer, setFindingPlayer] = useState(false);
-    const socket = useContext(SocketContext);
-
+ 
     useEffect(() => {
         if (socket) {
             const username = Cookies.get('username'); 
             if (username) {
                 console.log('Logged in user:', username);
-                socket.connect();
                 socket.emit('USERNAME', username);
 
                 socket.on('FINDING PLAYER', () => {

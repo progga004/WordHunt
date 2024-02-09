@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from 'react';
-import SocketContext from './SocketContext'; 
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
@@ -8,13 +7,12 @@ const Loader = () => (
       <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-green-900"></div>
     </div>
   );
-const EnterWordPage = () => {
+const EnterWordPage = ({socket}) => {
     const [word, setWord] = useState('');
     const [waitingForOtherPlayer, setWaitingForOtherPlayer] = useState(false);
     const [validWords, setValidWords] = useState(new Set());
     const [invalidWord, setInvalidWord] = useState(false); 
     const navigate = useNavigate();
-    const socket = useContext(SocketContext);
     const currentUserUsername = Cookies.get('username');
 
     useEffect(() => {
@@ -27,7 +25,6 @@ const EnterWordPage = () => {
         
 
         if (socket) {
-            socket.connect();
             socket.on('WAITING FOR OTHER WORD CHOICE', () => {
                 console.log('Waiting for the other player to submit their word...');
                 setWaitingForOtherPlayer(true);

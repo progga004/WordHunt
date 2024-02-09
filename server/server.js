@@ -9,10 +9,9 @@ const cors = require('cors');
 
 const app = express();
 const server = http.createServer(app);
-console.log(process.env.DATABASE_URL);
 
 
-mongoose.connect('mongodb://127.0.0.1/wordHunt', {useNewUrlParser: true}); //changed to ipv4
+mongoose.connect('mongodb://127.0.0.1/wordHunt'); //changed to ipv4
 
 const db = mongoose.connection;
 db.on("error", err => console.error(err));

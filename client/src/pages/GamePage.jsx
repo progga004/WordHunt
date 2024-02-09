@@ -1,13 +1,15 @@
 import { useState } from "react";
+import { useLocation } from 'react-router-dom';
 import LeftPanel from "../components/LeftPanel";
 import RightPanel from "../components/RightPanel";
 import CenterPanel from "../components/CenterPanel";
 const GamePage = () => {
   const actualWordLeft = "JELLY";
   const actualWordRight = "APPLE";
+  const location = useLocation();//
   const [guessesLeft, setGuessesLeft] = useState([]);
   const [guessesRight, setGuessesRight] = useState([]);
-  const [isYourTurn, setIsYourTurn] = useState(true);
+  const { isYourTurn, playerOneUsername } = location.state || {};
   const [resetFlag, setResetFlag] = useState(false);
 
   const handleGuessSubmission = (newGuess) => {
@@ -24,7 +26,7 @@ const GamePage = () => {
     <div className="bg-green-200 min-h-screen flex items-center justify-center">
       <div className="container mx-auto p-4 flex justify-between items-start">
         <LeftPanel
-          username="Player 1"
+          username={player1}
           guesses={guessesLeft}
           actualWord={actualWordRight}
         />
@@ -35,7 +37,7 @@ const GamePage = () => {
           resetInputs={resetFlag}
         />
         <RightPanel
-          username="Player 2"
+          username={player2}
           guesses={guessesRight}
           actualWord={actualWordLeft}
         />

@@ -38,7 +38,8 @@ const GamePage = ({ socket }) => {
 
         navigate("/game-over", { state: { result } });
       });
-    }
+    } else
+      navigate("/");
   }, [socket]);
 
   const handleGuessSubmission = (newGuess) => {

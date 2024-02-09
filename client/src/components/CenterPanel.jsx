@@ -3,17 +3,17 @@ import { useState, useEffect } from "react";
 import LetterBox from "./LetterBox";
 
 const CenterPanel = ({
-  actualWord,
   isYourTurn,
+  word,
   onSubmitGuess,
   resetInputs,
 }) => {
-  const [inputs, setInputs] = useState(Array(actualWord.length).fill(""));
+  const [inputs, setInputs] = useState(Array(5).fill(""));
   const [feedbackMessage, setFeedbackMessage] = useState("");
 
   useEffect(() => {
-    setInputs(Array(actualWord.length).fill(""));
-  }, [resetInputs, actualWord]);
+    setInputs(Array(5).fill(""));
+  }, [resetInputs, word]);
 
   const handleLetterChange = (index) => (e) => {
     const newInputs = [...inputs];
@@ -34,7 +34,7 @@ const CenterPanel = ({
     const userGuess = inputs.join("");
     onSubmitGuess(userGuess);
 
-    if (userGuess.toUpperCase() === actualWord.toUpperCase()) {
+    if (userGuess.toUpperCase() === word.toUpperCase()) {
       setFeedbackMessage("Correct! Well done.");
     } else {
       setFeedbackMessage("Incorrect guess, try again!");
@@ -47,7 +47,7 @@ const CenterPanel = ({
       {isYourTurn ? (
         <h2 className="text-2xl font-bold text-green-800 mb-6">Your Turn!</h2>
       ) : (
-        <h2 className="text-2xl font-bold text-red-800 mb-6">Player 2 Turn!</h2>
+        <h2 className="text-2xl font-bold text-red-800 mb-6">Other players Turn!</h2>
       )}
 
       <div className="flex mb-4">

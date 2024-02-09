@@ -62,7 +62,7 @@ userRouter.post("/", async (req, res) => {
 });
 
 const randomUsername = () => {
-  let words = fs.readFileSync("../5_letter_words.txt", "utf-8").split("\n");
+  let words = fs.readFileSync("../5_letter_words.txt", "utf-8").split(/[\r\n]+/);
   let randomNumber = Math.floor(Math.random() * (9999 - 1000)) + 1000;
   let randomUsername = `${words[Math.floor(Math.random() * words.length)]}${
     words[Math.floor(Math.random() * words.length)]

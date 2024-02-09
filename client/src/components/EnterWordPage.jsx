@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
 const Loader = () => (
@@ -8,12 +8,12 @@ const Loader = () => (
     </div>
   );
 const EnterWordPage = ({socket}) => {
+    const username = useLocation().state.username;
     const [word, setWord] = useState('');
     const [waitingForOtherPlayer, setWaitingForOtherPlayer] = useState(false);
     const [validWords, setValidWords] = useState(new Set());
     const [invalidWord, setInvalidWord] = useState(false); 
     const navigate = useNavigate();
-    const currentUserUsername = Cookies.get('username');
 
     useEffect(() => {
         fetch('/5_letter_words.txt')
@@ -31,17 +31,20 @@ const EnterWordPage = ({socket}) => {
             });
 
             
-       socket.on("GAME START", (data) => {
-                const { playerOneUsername } = data;
-                const isMyTurn = playerOneUsername === currentUserUsername;
-            
-                navigate('/game', { 
-                  state: { 
-                    isYourTurn: isMyTurn,
-                    playerOneUsername: playerOneUsername,
-                  } 
-                });
+        socket.on("GAME START", (data) => {
+            console.log(data);
+            const { playerOne, playerTwo } = data;
+            const isMyTurn = playerOne === username;
+
+            navigate('/game', { 
+                state: { 
+                isYourTurn: isMyTurn,
+                username,
+                otherPlayer : isMyTurn ? playerTwo : playerOne,
+                word
+                } 
             });
+        });
 
             
 

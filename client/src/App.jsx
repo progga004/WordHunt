@@ -31,7 +31,7 @@ function App() {
           <Route path="/stats" element={<StatsPage socket={socket} />} />
           <Route path="/game-rules" element={<RulesPage /> } />
           <Route path="/enter-word" element={<EnterWordPage socket={socket}/> } />
-          <Route path="/game-over" element={<GameOverPage />} />
+          <Route path="/game-over" element={<GameOverPage socket={socket}/>} />
 
 
         </Routes>

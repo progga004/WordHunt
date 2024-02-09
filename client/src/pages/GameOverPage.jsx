@@ -1,8 +1,16 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
-const GameOverPage = ({ gameResult }) => {
+const GameOverPage = ({socket}) => {
   const navigate = useNavigate();
+  const gameResult = useLocation().state.result;
+  console.log("reaching here");
+
+  useEffect(() => {
+    setTimeout(() => {
+      socket.disconnect();
+    }, 10)
+  })
 
   const renderMessage = () => {
     switch (gameResult) {

@@ -25,7 +25,7 @@ const HomePage = ({socket}) => {
       socket.connect();
       socket.on('connect', () => {
         console.log('Socket connected successfully');
-        navigate('/find-player'); 
+        navigate('/find-player', {state: {username}}); 
       });
      } 
   };

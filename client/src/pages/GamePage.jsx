@@ -1,46 +1,72 @@
-import { useState } from "react";
-import { useLocation } from 'react-router-dom';
+import { useEffect, useState } from "react";
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import LeftPanel from "../components/LeftPanel";
 import RightPanel from "../components/RightPanel";
 import CenterPanel from "../components/CenterPanel";
 const GamePage = ({socket}) => {
-  const actualWordLeft = "JELLY";
-  const actualWordRight = "APPLE";
-  const location = useLocation();//
+  const location = useLocation();
+  const navigate = useNavigate();
   const [guessesLeft, setGuessesLeft] = useState([]);
   const [guessesRight, setGuessesRight] = useState([]);
-  const { isYourTurn, playerOneUsername } = location.state || {};
+  const { isYourTurn, username, otherPlayer, word } = location.state || {};
+  const [currentUserTurn, setTurn] = useState(isYourTurn ? username : otherPlayer);
+  const [leftLetters, setLeftLetters] = useState([]);
+  const [rightLetters, setRightLetters] = useState([]);
   const [resetFlag, setResetFlag] = useState(false);
 
-  const handleGuessSubmission = (newGuess) => {
-    if (isYourTurn) {
-      setGuessesLeft((oldGuesses) => [...oldGuesses, newGuess]);
-    } else {
-      setGuessesRight((oldGuesses) => [...oldGuesses, newGuess]);
+  useEffect(() => {
+    if (socket) {
+      socket.on("SWITCH TURN", (nextUser, word, lettersInCommon) => {
+        if (username === nextUser) {
+          setGuessesRight((oldGuesses) => [...oldGuesses, word]);
+          setRightLetters((oldGuesses) => [...oldGuesses, lettersInCommon]);
+        }
+        else {
+          setLeftLetters((oldGuesses) => [...oldGuesses, lettersInCommon]);
+        }
+
+        setResetFlag((flag) => !flag);
+        setTurn(nextUser);
+      });
+
+      socket.on("GAME OVER", winner => {
+        let result;
+        if (username === winner)
+          result = "win";
+        else
+          result = "lose";
+
+        navigate('/game-over', {state: {result}});
+      })
     }
-    setIsYourTurn(!isYourTurn);
-    setResetFlag((flag) => !flag);
+  }, [socket])
+
+  const handleGuessSubmission = (newGuess) => {
+    if (currentUserTurn === username) {
+      setGuessesLeft((oldGuesses) => [...oldGuesses, newGuess]);
+    }
+    socket.emit("WORD GUESS", newGuess);
   };
 
   return (
     <div className="bg-green-200 min-h-screen flex items-center justify-center">
       <div className="container mx-auto p-4 flex justify-between items-start">
         <LeftPanel
-          username="player1"
+          username={username}
           guesses={guessesLeft}
-          actualWord={actualWordRight}
           socket={socket}
+          letters={leftLetters}
         />
-        <CenterPanel
-          actualWord={isYourTurn ? actualWordRight : actualWordLeft}
-          isYourTurn={isYourTurn}
+        {(currentUserTurn === username) ? <CenterPanel
+          isYourTurn={currentUserTurn === username}
+          word={word}
           onSubmitGuess={handleGuessSubmission}
           resetInputs={resetFlag}
-        />
+        /> : <h1>Waiting for {otherPlayer}</h1>}
         <RightPanel
-          username="player2"
+          username={otherPlayer}
           guesses={guessesRight}
-          actualWord={actualWordLeft}
+          letters={rightLetters}
         />
       </div>
     </div>

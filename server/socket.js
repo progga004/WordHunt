@@ -78,7 +78,10 @@ function handleSocketConnection(server) {
 
             if (rooms[idx]["player1Word"] && rooms[idx]["player2Word"]) {
                 rooms[idx]["starttime"] = Date.now();
-                io.to(currRoom).emit("GAME START", rooms[idx]["player1"]);
+                io.to(currRoom).emit("GAME START", {
+                    playerOne: rooms[idx]["player1"], 
+                    playerTwo: rooms[idx]["player2"]
+                });
                
                 
             }
@@ -102,15 +105,16 @@ function handleSocketConnection(server) {
                 nextUser = rooms[idx]["player1"]
             }
             
+            let lettersInCommon = findLetters(word, wordToCompare);
+            rooms[idx]["moves"].push(`${word} - ${lettersInCommon}`)
             // compare letters and send info to clients
-            if (wordToCompare === word) {
+            if (wordToCompare.toLowerCase() === word.toLowerCase()) {
                     rooms[idx]["winner"] = username;
                     postGame(idx);
                     io.to(currRoom).emit("GAME OVER", username)
             }
             else {
-                let lettersInCommon = findLetters(word, wordToCompare);
-                rooms[idx]["moves"].push(`${word} - ${lettersInCommon}`)
+                console.log("emitting switch turn");
                 io.to(currRoom).emit("SWITCH TURN", nextUser, word, lettersInCommon);
             }
         })
@@ -176,14 +180,19 @@ function handleSocketConnection(server) {
 
     // IMPORTANT: word1 is the guess, word2 is the users actual word
     const findLetters = (word1, word2) => {
-        let numInCommon = 0;
-        for (let i = 0; i < word2.length; i++) {
-            for (let j = 0; j < word1.length; j++) {
-                if (word2[i] === word1[j])
-                    numInCommon++;
-            }
-        }
-        return numInCommon;
+        // Convert the words to lowercase to make the comparison case-insensitive
+        const lowerWord1 = word1.toLowerCase();
+        const lowerWord2 = word2.toLowerCase();
+
+        // Use a Set to store unique letters in each word
+        const set1 = new Set(lowerWord1);
+        const set2 = new Set(lowerWord2);
+
+        // Find the intersection of the sets to get common letters
+        const commonLetters = [...set1].filter(letter => set2.has(letter));
+
+        // Return the count of common letters
+        return commonLetters.length;
     }
 
     const postGame = async idx => {
@@ -198,8 +207,8 @@ function handleSocketConnection(server) {
             starttime: room["starttime"],
             endttime: Date.now(),
             messages: room["messages"],
-            p1word: room["player1Word"],
-            p2word: room["player2Word"]
+            p1word: room["player1Word"].toUpperCase(),
+            p2word: room["player2Word"].toUpperCase()
         });
 
         try {

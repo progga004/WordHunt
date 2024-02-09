@@ -30,6 +30,9 @@ const HomePage = ({socket}) => {
       socket.on('PLAYER LEFT', () => {
         socket.disconnect();
       });
+      socket.on("disconnect", () => {
+        navigate("/")
+      })
      } 
   };
 

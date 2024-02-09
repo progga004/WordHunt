@@ -26,7 +26,7 @@ const GamePage = () => {
     <div className="bg-green-200 min-h-screen flex items-center justify-center">
       <div className="container mx-auto p-4 flex justify-between items-start">
         <LeftPanel
-          username={player1}
+          username="player1"
           guesses={guessesLeft}
           actualWord={actualWordRight}
         />
@@ -37,7 +37,7 @@ const GamePage = () => {
           resetInputs={resetFlag}
         />
         <RightPanel
-          username={player2}
+          username="player2"
           guesses={guessesRight}
           actualWord={actualWordLeft}
         />

@@ -1,3 +1,4 @@
+
 import { useEffect, useState,useContext} from "react";
 import { Link } from "react-router-dom";
 import { userAPI } from "../components/Api";
@@ -27,6 +28,7 @@ const HomePage = () => {
 
         loginUser();
     }, [socket]); 
+
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-green-200">
       <div className="flex flex-col items-center space-y-6">

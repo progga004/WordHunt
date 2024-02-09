@@ -68,6 +68,8 @@ function handleSocketConnection(server) {
             const { username, word } = data;
             console.log(username + " chose the word: " + word);
 
+            console.log(`Recieving word ${word}`);
+
             // store word
             if (rooms[idx]["player1"] === username)
                 rooms[idx]["player1Word"] = word;

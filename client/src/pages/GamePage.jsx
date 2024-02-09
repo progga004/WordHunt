@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import LeftPanel from "../components/LeftPanel";
 import RightPanel from "../components/RightPanel";
 import CenterPanel from "../components/CenterPanel";
-const GamePage = () => {
+const GamePage = ({socket}) => {
   const actualWordLeft = "JELLY";
   const actualWordRight = "APPLE";
   const location = useLocation();//
@@ -29,6 +29,7 @@ const GamePage = () => {
           username="player1"
           guesses={guessesLeft}
           actualWord={actualWordRight}
+          socket={socket}
         />
         <CenterPanel
           actualWord={isYourTurn ? actualWordRight : actualWordLeft}

@@ -28,7 +28,7 @@ function App() {
           <Route path="/" element={<HomePage socket={socket}/>} />
           <Route path="/game" element={<GamePage socket={socket}/>} />
           <Route path="/find-player" element={<FindingPlayerPage socket={socket}/>}/>
-          <Route path="/stats" element={<StatsPage />} />
+          <Route path="/stats" element={<StatsPage socket={socket} />} />
           <Route path="/game-rules" element={<RulesPage /> } />
           <Route path="/enter-word" element={<EnterWordPage socket={socket}/> } />
           <Route path="/game-over" element={<GameOverPage />} />

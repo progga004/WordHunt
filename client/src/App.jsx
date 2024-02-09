@@ -6,6 +6,7 @@ import FindingPlayerPage from "./components/FindPlayer";
 import EnterWordPage from "./components/EnterWordPage";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import RulesPage from "./pages/RulesPage";
+import GameOverPage from "./pages/GameOverPage";
 
 function App() {
   return (
@@ -20,6 +21,9 @@ function App() {
           <Route path="/stats" element={<StatsPage />} />
           <Route path="/game-rules" element={<RulesPage /> } />
           <Route path="/enter-word" element={<EnterWordPage /> } />
+          <Route path="/game-over" element={<GameOverPage />} />
+
+
         </Routes>
       </main>
     </BrowserRouter>

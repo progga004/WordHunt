@@ -79,6 +79,8 @@ function handleSocketConnection(server) {
             if (rooms[idx]["player1Word"] && rooms[idx]["player2Word"]) {
                 rooms[idx]["starttime"] = Date.now();
                 io.to(currRoom).emit("GAME START", rooms[idx]["player1"]);
+               
+                
             }
             else
                 socket.emit("WAITING FOR OTHER WORD CHOICE");

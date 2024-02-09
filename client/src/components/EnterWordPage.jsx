@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import SocketContext from './SocketContext'; 
 import Cookies from 'js-cookie';
-
 const EnterWordPage = () => {
     const [word, setWord] = useState('');
     const [waitingForOtherPlayer, setWaitingForOtherPlayer] = useState(false);

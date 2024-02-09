@@ -1,15 +1,18 @@
 import { useEffect, useState } from "react";
-import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from "react-router-dom";
 import LeftPanel from "../components/LeftPanel";
 import RightPanel from "../components/RightPanel";
 import CenterPanel from "../components/CenterPanel";
-const GamePage = ({socket}) => {
+
+const GamePage = ({ socket }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const [guessesLeft, setGuessesLeft] = useState([]);
   const [guessesRight, setGuessesRight] = useState([]);
   const { isYourTurn, username, otherPlayer, word } = location.state || {};
-  const [currentUserTurn, setTurn] = useState(isYourTurn ? username : otherPlayer);
+  const [currentUserTurn, setTurn] = useState(
+    isYourTurn ? username : otherPlayer
+  );
   const [leftLetters, setLeftLetters] = useState([]);
   const [rightLetters, setRightLetters] = useState([]);
   const [resetFlag, setResetFlag] = useState(false);
@@ -20,8 +23,7 @@ const GamePage = ({socket}) => {
         if (username === nextUser) {
           setGuessesRight((oldGuesses) => [...oldGuesses, word]);
           setRightLetters((oldGuesses) => [...oldGuesses, lettersInCommon]);
-        }
-        else {
+        } else {
           setLeftLetters((oldGuesses) => [...oldGuesses, lettersInCommon]);
         }
 
@@ -29,17 +31,15 @@ const GamePage = ({socket}) => {
         setTurn(nextUser);
       });
 
-      socket.on("GAME OVER", winner => {
+      socket.on("GAME OVER", (winner) => {
         let result;
-        if (username === winner)
-          result = "win";
-        else
-          result = "lose";
+        if (username === winner) result = "win";
+        else result = "lose";
 
-        navigate('/game-over', {state: {result}});
-      })
+        navigate("/game-over", { state: { result } });
+      });
     }
-  }, [socket])
+  }, [socket]);
 
   const handleGuessSubmission = (newGuess) => {
     if (currentUserTurn === username) {
@@ -57,12 +57,21 @@ const GamePage = ({socket}) => {
           socket={socket}
           letters={leftLetters}
         />
-        {(currentUserTurn === username) ? <CenterPanel
-          isYourTurn={currentUserTurn === username}
-          word={word}
-          onSubmitGuess={handleGuessSubmission}
-          resetInputs={resetFlag}
-        /> : <h1>Waiting for {otherPlayer}</h1>}
+        {currentUserTurn === username ? (
+          <CenterPanel
+            isYourTurn={currentUserTurn === username}
+            word={word}
+            onSubmitGuess={handleGuessSubmission}
+            resetInputs={resetFlag}
+          />
+        ) : (
+          <div className="flex flex-col justify-center items-center">
+            <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-green-900 mb-4"></div>
+            <p className="text-green-700 font-bold text-3xl">
+              Waiting for {otherPlayer}
+            </p>
+          </div>
+        )}
         <RightPanel
           username={otherPlayer}
           guesses={guessesRight}

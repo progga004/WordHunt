@@ -1,12 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import Loader from './Loader';
 
-const Loader = () => (
-    <div className="flex justify-center items-center">
-      <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-green-900"></div>
-    </div>
-  );
 const EnterWordPage = ({socket}) => {
     const username = useLocation().state.username;
     const [word, setWord] = useState('');
@@ -80,7 +76,6 @@ const EnterWordPage = ({socket}) => {
       {waitingForOtherPlayer && (
         <div className="absolute top-0 left-0 right-0 bottom-0 flex flex-col justify-center items-center z-20">
           <Loader />
-          <p className="text-green-700 font-bold text-3xl mt-4">Waiting for other player to choose word...</p>
         </div>
       )}
       <div className={`max-w-md w-full rounded-lg border border-gray-200 shadow-md flex flex-col p-6 bg-gray-200 ${waitingForOtherPlayer ? 'blur-lg' : ''} absolute`}>

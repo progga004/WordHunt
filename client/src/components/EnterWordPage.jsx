@@ -12,44 +12,38 @@ const EnterWordPage = ({socket}) => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetch('/5_letter_words.txt')
-            .then(response => response.text())
-            .then(text => {
-                const wordsArray = text.split(/\r?\n/); 
-                setValidWords(new Set(wordsArray)); 
-            });
-        
-
-        if (socket) {
-            socket.on('WAITING FOR OTHER WORD CHOICE', () => {
-                console.log('Waiting for the other player to submit their word...');
-                setWaitingForOtherPlayer(true);
-            });
-
+        if (socket && socket.connected) {
+            fetch('/5_letter_words.txt')
+                .then(response => response.text())
+                .then(text => {
+                    const wordsArray = text.split(/\r?\n/); 
+                    setValidWords(new Set(wordsArray)); 
+                });
             
-        socket.on("GAME START", (data) => {
-            console.log(data);
-            const { playerOne, playerTwo } = data;
-            const isMyTurn = playerOne === username;
+                socket.on('WAITING FOR OTHER WORD CHOICE', () => {
+                    console.log('Waiting for the other player to submit their word...');
+                    setWaitingForOtherPlayer(true);
+                });
 
-            navigate('/game', { 
-                state: { 
-                isYourTurn: isMyTurn,
-                username,
-                otherPlayer : isMyTurn ? playerTwo : playerOne,
-                word
-                } 
+                
+            socket.on("GAME START", (data) => {
+                console.log(data);
+                const { playerOne, playerTwo } = data;
+                const isMyTurn = playerOne === username;
+
+                navigate('/game', { 
+                    state: { 
+                    isYourTurn: isMyTurn,
+                    username,
+                    otherPlayer : isMyTurn ? playerTwo : playerOne,
+                    word
+                    } 
+                });
             });
-        });
+        } else
+            navigate("/");
 
-            
-
-            return () => {
-                socket.off('WAITING FOR OTHER WORD CHOICE');
-                socket.off('GAME START');
-            };
-        }
-    }, [socket]);
+    }, [socket, navigate]);
 
     const handleSubmit = (e) => {
         e.preventDefault();

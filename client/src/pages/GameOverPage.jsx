@@ -6,12 +6,6 @@ const GameOverPage = ({socket}) => {
   const gameResult = useLocation().state.result;
   console.log("reaching here");
 
-  useEffect(() => {
-    setTimeout(() => {
-      socket.disconnect();
-    }, 10)
-  })
-
   const renderMessage = () => {
     switch (gameResult) {
       case "win":
@@ -26,10 +20,12 @@ const GameOverPage = ({socket}) => {
   };
 
   const handlePlayAgain = () => {
+    socket.disconnect();
     navigate("/");
   };
 
   const handleStats = () => {
+    socket.disconnect();
     navigate("/stats");
   };
 

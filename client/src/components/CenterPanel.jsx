@@ -33,12 +33,6 @@ const CenterPanel = ({
 
     const userGuess = inputs.join("");
     onSubmitGuess(userGuess);
-
-    if (userGuess.toUpperCase() === word.toUpperCase()) {
-      setFeedbackMessage("Correct! Well done.");
-    } else {
-      setFeedbackMessage("Incorrect guess, try again!");
-    }
   };
 
   return (

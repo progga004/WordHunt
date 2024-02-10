@@ -112,33 +112,102 @@ const StatsPage = () => {
     }
   };
 
-    return (
-        <div className="bg-green-200 min-h-screen pt-16">
-          <div id="sortbuttons" className="flex justify-end pt-8 pr-4 w-full">
-            <button onClick={setToAll} className="bg-green-800 text-white font-bold py-2 px-4 rounded hover:bg-green-700 focus:outline-none focus:shadow-outline mr-2">All</button>
-            <button onClick={setToLastHour} className="bg-green-800 text-white font-bold py-2 px-4 rounded hover:bg-green-700 focus:outline-none focus:shadow-outline mr-2">Last Hour</button>
-            <button onClick={setToNewest} className="bg-green-800 text-white font-bold py-2 px-4 rounded hover:bg-green-700 focus:outline-none focus:shadow-outline">Newest</button>
-            <Link to="/" className="ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                    Back to Home
-                </Link>
-          </div>
-          <div className="flex justify-center items-center w-full h-full">
-            <table className="text-center w-auto">
-              <tbody>
-                {sortGames(allgames, currentSortOrder).map((game) => (
-                  <tr key={game.id}>
-                    <th className="pr-4">Player1: {game.player1}</th>
-                    <th className="px-4">Player2: {game.player2}</th>
-                    <th className="px-4">Winner: {game.winner}</th>
-                    <th className="pl-4">Time:{game.endttime.toLocaleString('en-US', {year: 'numeric',month: '2-digit',day: '2-digit',hour: '2-digit',
-                        minute: '2-digit',second: '2-digit',hour12: false,})}</th>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+  return (
+    <div className="bg-green-200 min-h-screen pt-10">
+      <div className="flex justify-between items-center px-5 lg:px-10 py-10">
+        <Link
+          to="/"
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out"
+        >
+          Back to Home
+        </Link>
+        <div className="px-5 lg:px-10 py-2">
+  <h1 className="text-lg text-yellow-800 font-bold font-serif">Hello, {username}</h1>
+</div>
+        <div className="space-x-2">
+          <button
+            onClick={setToAll}
+            className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded transition duration-300 ease-in-out"
+          >
+            All
+          </button>
+          <button
+            onClick={setToLastHour}
+            className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded transition duration-300 ease-in-out"
+          >
+            Last Hour
+          </button>
+          <button
+            onClick={setToNewest}
+            className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded transition duration-300 ease-in-out"
+          >
+            Newest
+          </button>
         </div>
-      );
-      
+      </div>
+      <div className="flex justify-center items-center w-full py-4 lg:py-8">
+        <div className="overflow-x-auto overflow-y-auto w-full max-w-6xl mx-auto">
+          <table className="table-auto shadow-lg bg-white w-full">
+            <thead className="bg-green-600 text-white text-left text-sm leading-normal">
+              <tr>
+                <th className="py-3 px-6">Player 1</th>
+                <th className="py-3 px-6">Player 2</th>
+                <th className="py-3 px-6 text-center">Winner</th>
+                <th className="py-3 px-6 text-center">Start Time</th>
+                <th className="py-3 px-6 text-center">End Time</th>
+              </tr>
+            </thead>
+            <tbody className="text-gray-600 text-sm font-light">
+              {sortGames(allGames, currentSortOrder).map((game) => (
+                <tr
+                  key={game}
+                  className="border-b border-gray-200 hover:bg-gray-100"
+                >
+                  <td className="py-3 px-6">{game.player1}</td>
+                  <td className="py-3 px-6 ">{game.player2}</td>
+                  <td className="py-3 px-6 text-center">{game.winner}</td>
+                  <td className="py-3 px-6 text-center">
+                    {new Date(game.starttime).toLocaleString()}
+                  </td>
+                  <td className="py-3 px-6 text-center">
+                    {new Date(game.endttime).toLocaleString()}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div className="flex justify-center items-center w-full py-4 lg:py-8">
+        <table className="table-auto shadow-lg bg-white w-full max-w-6xl mx-auto">
+          <thead className="bg-green-600 text-white">
+            <tr>
+              <th className="py-3 px-6">Player</th>
+              <th className="py-3 px-6 text-center">Wins</th>
+              <th className="py-3 px-6 text-center">Losses</th>
+              <th className="py-3 px-6 text-center">Most Guessed Word</th>
+            </tr>
+          </thead>
+          <tbody className="text-gray-700">
+            {Object.entries(playerStats).map(([player, stats], index) => (
+              <tr
+                key={index}
+                className="border-b border-gray-200 hover:bg-gray-100"
+              >
+                <td className="py-3 px-6">{player}</td>
+                <td className="py-3 px-6 text-center">{stats.wins}</td>
+                <td className="py-3 px-6 text-center">{stats.losses}</td>
+                <td className="py-3 px-6 text-center">
+                  {mostGuessedWord[player]
+                    ? `${mostGuessedWord[player].word} (${mostGuessedWord[player].count} times)`
+                    : "N/A"}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
 };
 export default StatsPage;

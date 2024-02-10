@@ -3,14 +3,12 @@ const userRouter = express.Router();
 const mod = require("../models");
 const User = mod["User"];
 const fs = require("fs");
-const { exit } = require("process");
-const path = require('path');
 
 // returns all user records
 userRouter.get("/", async (req, res) => {
   try {
     const user = await User.find();
-    console.log("All users",user);
+    console.log("All users", user);
     res.json(user);
   } catch (err) {
     res.status(500).send(err);
@@ -26,9 +24,11 @@ userRouter.get("/login", (req, res) => {
 
   try {
     const newUser = new User({
-        username: existingUsername
-    })
-    newUser.save().catch(err => {console.log('user already exists')});
+      username: existingUsername,
+    });
+    newUser.save().catch((err) => {
+      console.log("user already exists");
+    });
     res.cookie("username", existingUsername).status(200).json({
       username: existingUsername,
     });
@@ -62,7 +62,9 @@ userRouter.post("/", async (req, res) => {
 });
 
 const randomUsername = () => {
-  let words = fs.readFileSync("../5_letter_words.txt", "utf-8").split(/[\r\n]+/);
+  let words = fs
+    .readFileSync("../5_letter_words.txt", "utf-8")
+    .split(/[\r\n]+/);
   let randomNumber = Math.floor(Math.random() * (9999 - 1000)) + 1000;
   let randomUsername = `${words[Math.floor(Math.random() * words.length)]}${
     words[Math.floor(Math.random() * words.length)]

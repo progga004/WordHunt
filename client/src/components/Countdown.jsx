@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; 
 
-const Countdown = () => {
+const Countdown = ({ username }) => {
     const [count, setCount] = useState(3);
     const navigate = useNavigate(); 
 
     useEffect(() => {
         if (count === 0) {
-            navigate('/enter-word');
+            navigate('/enter-word', {state: {username}});
             return;
         }
         const timerId = setTimeout(() => {

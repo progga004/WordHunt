@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const userSchema= new mongoose.Schema({
-    username:{type:String, required: true},
+    username:{type:String, required: true, unique: true},
     games: {type: [mongoose.Schema.Types.ObjectId], ref:"Game", default: []}
 })
 

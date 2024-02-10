@@ -1,6 +1,7 @@
 import { useEffect, useState, useContext } from 'react';
 import './find.css';
 import Countdown from './Countdown';
+import Cookies from 'js-cookie'; 
 import { useLocation, useNavigate } from 'react-router-dom';
 const FindingPlayerPage = ({socket}) => {
     const username = useLocation().state.username;

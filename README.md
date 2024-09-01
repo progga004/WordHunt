@@ -12,6 +12,7 @@ This project is a multiplayer, interactive game inspired by Wordle, where two pl
 - **User Interface**: A clean and intuitive interface built with React for a smooth gaming experience.
 - **Word Validation**: Ensures all guesses are valid five-letter words using a backend validation service.
 - **Feedback System**: Provides feedback similar to Wordle, highlighting correct letters and positions.
+- **Player Statistics**: Displays a list of player statistics, including win/loss records, number of guesses.
 
 ## Tech Stack
 
